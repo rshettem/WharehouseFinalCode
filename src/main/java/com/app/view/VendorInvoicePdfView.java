@@ -32,7 +32,7 @@ public class VendorInvoicePdfView extends AbstractPdfView{
 	protected void buildPdfDocument(Map<String, Object> model, Document doc, PdfWriter writer,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		response.setHeader("Content-Disposition", "attachment;filename=poinvoice.pdf");
+		response.setHeader("Content-Disposition", "attachment;filename=PURCHASEINVOICE.pdf");
 		Purchase po=(Purchase) model.get("po");
 		
 		List<PurchaseDtl> poDtls=po.getDetails();
