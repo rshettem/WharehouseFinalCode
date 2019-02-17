@@ -23,6 +23,7 @@ import com.app.model.Document;
 import com.app.model.Item;
 import com.app.model.OrderMethod;
 import com.app.model.Purchase;
+import com.app.model.PurchaseDtl;
 import com.app.model.SaleOrder;
 import com.app.model.ShipmentType;
 import com.app.model.Uom;
@@ -60,7 +61,9 @@ public class AppConfig implements WebMvcConfigurer{
 		/* TODO pass model classes */  
 		sf.setAnnotatedClasses(ShipmentType.class,Uom.class,
 				OrderMethod.class,WhUserType.class,User.class,
-				Document.class,Item.class,Purchase.class,SaleOrder.class); //Model class names  
+				Document.class,Item.class,Purchase.class,SaleOrder.class,
+				PurchaseDtl.class
+				); //Model class names  
 		return sf;  
 	}   
 	private Properties props() {   

@@ -1,6 +1,8 @@
 package com.app.controller;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.app.model.Purchase;
+import com.app.model.PurchaseDtl;
+import com.app.service.IItemService;
 import com.app.service.IPurchaseService;
 import com.app.service.IShipmentTypeService;
 import com.app.service.IWhUserTypeService;
@@ -32,6 +36,8 @@ public class PurchaseController {
 	private IShipmentTypeService shipmentTypeService;
 	@Autowired
 	private PurchaseValidator validator;
+	@Autowired
+	private IItemService itemService;
 
 	@RequestMapping("/register")
 	public String showRegister(ModelMap map) {
@@ -103,7 +109,7 @@ public class PurchaseController {
 		purchaseService.updatePurchase(purchase);
 		map.addAttribute("purchase", purchaseService.getAllPurchases());
 		return "PurchaseData";
-		
+
 	}
 
 	@RequestMapping("/excelExport")
@@ -126,4 +132,103 @@ public class PurchaseController {
 		}
 		return mv;
 	}
+
+	/***
+	 * Child Operations starts here
+	 */
+
+	private void getDtlUi(Integer orderId,ModelMap map) {
+		Purchase po=purchaseService.getPurchaseById(orderId);
+
+		//PO Code to show as Read Only
+		map.addAttribute("poId", po.getOrderId());
+		map.addAttribute("poCode", po.getOrderCode());
+		map.addAttribute("poStatus", po.getOrderStatus());
+
+		/**
+		 * Form Data START
+		 */
+		//new empty form child
+		PurchaseDtl dtl=new PurchaseDtl();
+		dtl.setPoHdrId(po.getOrderId());
+		map.addAttribute("purchaseDtl", dtl);
+
+		//display items drop down
+		Map<Integer,String> itemsMap=itemService.getItemIdNameCode();
+		map.addAttribute("itemsMap", itemsMap);
+		/**
+		 *  FORM DATA END
+		 */
+		List<PurchaseDtl> dtls=po.getDetails();
+		if(dtls==null || dtls.isEmpty()) {
+			po.setOrderStatus("OPEN");
+			map.addAttribute("poStatus","OPEN");
+			purchaseService.updatePurchase(po);
+		}else {
+			//adjust slnos
+			int count=0;
+			for(PurchaseDtl d:dtls) {
+				d.setSlno(++count);
+			}
+		}
+
+		//all added items to show in table
+		map.addAttribute("dtls",dtls );
+
+	}
+
+	/** 1. Show Add Items Pages
+	 * 
+	 */
+	@RequestMapping("/viewItems")
+	public String showItemsPage(@RequestParam Integer orderId,ModelMap map) {
+		//complete common setup is provided here
+		getDtlUi(orderId, map);
+		return "PurchaseItems";
+	}
+
+	/**
+	 * 2. Add Items to PO and update status to PICKING (if items count >=1)
+	 * 
+	 */
+	@RequestMapping(value="/addItem",method=RequestMethod.POST)
+	public String addPoItem(@ModelAttribute PurchaseDtl purchaseDtl,ModelMap map) {
+		//do form validation PurchaseDtlValidator
+
+		//save child data
+		Purchase po=purchaseService.getPurchaseById(purchaseDtl.getPoHdrId());
+		po.setOrderStatus("PICKING"); // check here status update
+		po.getDetails().add(purchaseDtl);
+		purchaseService.updatePurchase(po);
+
+		//setup Purchase Items JSP Data
+		getDtlUi(po.getOrderId(), map);
+		return "PurchaseItems";
+	}
+
+	/**
+	 * 3. Delete Item based on dtlId and update status to OPEN if Items Count=0
+	 * 
+	 */
+	@RequestMapping("/removeItem")
+	public String deletePoDtl(@RequestParam Integer orderDtlId,@RequestParam Integer orderId,ModelMap map) {
+		purchaseService.deletePurchaseDtlById(orderDtlId);
+		//setup Purchase Items JSP Data
+		getDtlUi(orderId, map);
+		return "PurchaseItems";
+	}
+
+	/**
+	 * 4. Confirm Order ie chnage status to ORDERED 
+	 */
+	@RequestMapping("/confirmOrder")
+	public String updateOrderConfirm(@RequestParam Integer orderId,ModelMap map) {
+		Purchase po=purchaseService.getPurchaseById(orderId);
+		po.setOrderStatus("ORDERED");
+		purchaseService.updatePurchase(po);
+		getDtlUi(orderId, map);
+		return "PurchaseItems";
+	} 
+
+
 }

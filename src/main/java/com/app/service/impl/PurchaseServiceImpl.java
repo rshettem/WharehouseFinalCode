@@ -45,5 +45,11 @@ public class PurchaseServiceImpl implements IPurchaseService {
 	public boolean isOrderCodeExist(String orderCode) {
 		return dao.isOrderCodeExist(orderCode);
 	}
+	
+
+	@Transactional
+	public void deletePurchaseDtlById(Integer orderDtlId) {
+		dao.deletePurchaseDtlById(orderDtlId);
+	}
 
 }

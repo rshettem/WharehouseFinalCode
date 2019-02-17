@@ -1,13 +1,17 @@
 package com.app.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.app.dao.IItemDao;
 import com.app.model.Item;
+import com.app.util.AppCollectionUtil;
 
 @Repository
 public class ItemDaoImpl implements IItemDao {
@@ -49,4 +53,21 @@ public class ItemDaoImpl implements IItemDao {
 		}
 		return count>0?true:false;
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public Map<Integer, String> getItemIdNameCode() {
+		//select itemId,itemCode from itemtab;
+		DetachedCriteria hql=
+		DetachedCriteria.forClass(Item.class)
+		.setProjection(
+				Projections.projectionList()
+				.add(Projections.property("itemId"))
+				.add(Projections.property("itemCode"))
+				);
+		List<Object[]> list=(List<Object[]>) ht.findByCriteria(hql);
+		return AppCollectionUtil.toMap(list);
+	}
+	
+	
 }

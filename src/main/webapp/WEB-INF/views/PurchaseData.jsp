@@ -22,25 +22,30 @@
 						<h4>No Data Found</h4>
 					</c:when>
 					<c:otherwise>
-						<table class="table table-hover table-bordered">
+						<table class="table table-hover table-bordered ">
 
 							<tr class="thead-light">
 								<th>ID</th>
 								<th>CODE</th>
+								<th class="text-info">STATUS*</th>
 								<th>REF NUM</th>
 								<th>QC</th>
 								<th>VENDOR</th>
 								<th>SHIPMENT CODE</th>
-								<th colspan="5">OPERATIONS</th>
+								<th colspan="6">OPERATIONS</th>
 							</tr>
 							<c:forEach items="${purchase}" var="po">
 								<tr>
-									<td><c:out value="${po.orderId}"></c:out></td>
-									<td><c:out value="${po.orderCode}"></c:out></td>
-									<td><c:out value="${po.refNumber}"></c:out></td>
-									<td><c:out value="${po.quaCheck}"></c:out></td>
-									<td><c:out value="${po.whUserType.userName}"></c:out></td>
-									<td><c:out value="${po.shipmentType.shipmentCode}"></c:out></td>
+									<td><c:out value="${po.orderId}"/></td>
+									<td><c:out value="${po.orderCode}"/></td>
+									<td class="text-info"><c:out value="${po.orderStatus}"/></td>
+									<td><c:out value="${po.refNumber}"/></td>
+									<td><c:out value="${po.quaCheck}"/></td>
+									<td><c:out value="${po.whUserType.userName}"/></td>
+									<td><c:out value="${po.shipmentType.shipmentCode}"/></td>
+									<td><a href="viewItems?orderId=${po.orderId}"> <img
+											src="../resources/images/items2.png" height="50" width="50">
+									</a></td>
 									<td><a href="view?orderId=${po.orderId}"> <img
 											src="../resources/images/view.png" height="40" width="40">
 									</a></td>

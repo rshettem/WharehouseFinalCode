@@ -12,5 +12,6 @@ public interface IPurchaseDao {
 	public Purchase getPurchaseById(Integer orderId);
 	public List<Purchase> getAllPurchases();
 	public boolean isOrderCodeExist(String orderCode);
+	public void deletePurchaseDtlById(Integer orderDtlId);
 
 }

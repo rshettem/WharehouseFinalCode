@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.app.dao.IPurchaseDao;
 import com.app.model.Purchase;
+import com.app.model.PurchaseDtl;
 
 @Repository
 public class PurchaseDaoImpl implements IPurchaseDao {
@@ -45,6 +46,10 @@ public class PurchaseDaoImpl implements IPurchaseDao {
 			count=purchases.get(0);
 		}
 		return count>0?true:false;
+	}
+	@Override
+	public void deletePurchaseDtlById(Integer orderDtlId) {
+		ht.delete(new PurchaseDtl(orderDtlId));
 	}
 
 }

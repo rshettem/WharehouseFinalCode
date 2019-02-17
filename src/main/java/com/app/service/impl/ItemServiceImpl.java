@@ -1,6 +1,7 @@
 package com.app.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,4 +49,8 @@ public class ItemServiceImpl implements IItemService {
 		return dao.isItemCodeExist(itemCode);
 	}
 
+	@Transactional(readOnly=true)
+	public Map<Integer, String> getItemIdNameCode() {
+		return dao.getItemIdNameCode();
+	}
 }

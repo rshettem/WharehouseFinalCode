@@ -46,8 +46,7 @@
 							Male
 							<form:radiobutton path="gender" value="FEMALE" />
 							Female
-							<form:radiobutton path="gender" value="OTHER" />
-							Other
+							
 						</div>
 					</div>
 					
