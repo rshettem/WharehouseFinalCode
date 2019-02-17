@@ -221,14 +221,22 @@ public class PurchaseController {
 	/**
 	 * 4. Confirm Order ie chnage status to ORDERED 
 	 */
-	@RequestMapping("/confirmOrder")
-	public String updateOrderConfirm(@RequestParam Integer orderId,ModelMap map) {
+	@RequestMapping("/updateOrderStatus")
+	public String updateOrderConfirm(@RequestParam Integer orderId,@RequestParam String status,ModelMap map) {
 		Purchase po=purchaseService.getPurchaseById(orderId);
-		po.setOrderStatus("ORDERED");
+		po.setOrderStatus(status);
 		purchaseService.updatePurchase(po);
-		getDtlUi(orderId, map);
-		return "PurchaseItems";
+		String page=null;
+		if(status.equals("ORDERED")) {
+			page="PurchaseItems";
+			getDtlUi(orderId, map);
+		}else {
+			map.addAttribute("purchase", purchaseService.getAllPurchases());
+			page="PurchaseData";
+		}
+		return page;
 	} 
 
+	
 
 }

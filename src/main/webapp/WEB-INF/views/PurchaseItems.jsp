@@ -71,7 +71,7 @@
 						<tr>
 							<c:if test="${poStatus =='PICKING' }">
 								<td colspan="5" align="center"><a
-									href="confirmOrder?orderId=${poId}"
+									href="updateOrderStatus?orderId=${poId}&status=ORDERED"
 									class="btn btn-success">CONFIRM ORDER</a></td>
 							</c:if>
 						</tr>
