@@ -23,6 +23,7 @@ import com.app.service.IWhUserTypeService;
 import com.app.validator.PurchaseValidator;
 import com.app.view.PurchaseExcelView;
 import com.app.view.PurchasePdfView;
+import com.app.view.VendorInvoicePdfView;
 
 @Controller
 @RequestMapping("/purchase")
@@ -235,8 +236,21 @@ public class PurchaseController {
 			page="PurchaseData";
 		}
 		return page;
-	} 
-
+	}
 	
+	/**
+	 * 5. Generate Vendor Invoice
+	 */
+	@RequestMapping("/viewInvoice")
+	public ModelAndView generateInvoice(@RequestParam Integer orderId){
+		Purchase po=purchaseService.getPurchaseById(orderId);
+		ModelAndView m=null;
+		if(po.getOrderStatus().equals("INVOICED")){
+			m=new ModelAndView(new VendorInvoicePdfView(),"po",po);
+		}else{
+			m=new ModelAndView("PurchaseData","purchase", purchaseService.getAllPurchases());
+		}
+		return m;
+	}
 
 }
