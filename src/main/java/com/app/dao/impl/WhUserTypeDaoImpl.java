@@ -77,15 +77,15 @@ public class WhUserTypeDaoImpl implements IWhUserTypeDao {
 	public Map<Integer, String> getAllWhUserByType(String userType) {
 		//String hql = "select userId,userCode from "+WhUserType.class.getName()+" where userType=?";
 		DetachedCriteria hql=
-		DetachedCriteria.forClass(WhUserType.class)
-		.setProjection(
-				Projections.projectionList()
-				.add(Projections.property("userId"))
-				.add(Projections.property("userCode"))
-				
-				)
-		.add(Restrictions.eq("userType", userType))
-		;
+				DetachedCriteria.forClass(WhUserType.class)
+				.setProjection(
+						Projections.projectionList()
+						.add(Projections.property("userId"))
+						.add(Projections.property("userCode"))
+
+						)
+				.add(Restrictions.eq("userType", userType))
+				;
 		List<Object[]> list=(List<Object[]>) ht.findByCriteria(hql);
 		return AppCollectionUtil.toMap(list);
 	}
@@ -96,10 +96,10 @@ public class WhUserTypeDaoImpl implements IWhUserTypeDao {
 		//String hql="select count("+type+") from "+WhUserType.class.getName()+" where "+type+"=?";
 
 		DetachedCriteria hql=
-		DetachedCriteria.forClass(WhUserType.class)
-		.setProjection(Projections.count(type))
-		.add(Restrictions.eq(type, userEmailOrmobile));
-		
+				DetachedCriteria.forClass(WhUserType.class)
+				.setProjection(Projections.count(type))
+				.add(Restrictions.eq(type, userEmailOrmobile));
+
 		List<Long> user=(List<Long>) ht.findByCriteria(hql);
 
 		if (user!=null && !user.isEmpty()) {
