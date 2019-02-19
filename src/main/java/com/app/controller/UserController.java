@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.app.model.User;
 import com.app.service.IUserService;
+import com.app.util.EmailUtil;
 import com.app.util.UserUtil;
 import com.app.validator.UserValidator;
 import com.app.view.UserExcelView;
@@ -34,6 +35,8 @@ public class UserController {
 	private UserValidator validator;  
 	@Autowired
 	private UserUtil userUtil;
+	@Autowired
+	private EmailUtil emailUtil;
 
 	//1.show register page
 	@RequestMapping("/register")
@@ -46,14 +49,31 @@ public class UserController {
 	//2.insert user details in Db
 	@RequestMapping(value="/insert",method=RequestMethod.POST)
 	public String saveUserDetails(@ModelAttribute User user,Errors errors,ModelMap map) {
-		
+
 		validator.validate(user, errors);
-		
+
 		if (errors.hasErrors()) {
 			map.addAttribute("message", "please check all fields !!");
 		} else {
-			map.addAttribute("message", user.getUserName()+" saved with Id :"+service.saveUser(user));
+			String pwd=user.getUserPassword();
+			Integer userId=service.saveUser(user);
+			String message=user.getUserName()+" saved with Id :"+userId;
 			map.addAttribute("user", new User());
+			
+			//email config start
+			String text="Hello! " + user.getUserName()
+			+ " , welcome to Warehouse App.. Your user name is: " + user.getUserEmail()
+			+ " , Password is : " + pwd
+			+ " , Your Roles are : " +user.getUserRoles();
+			
+			boolean flag=emailUtil.sendEmail(user.getUserEmail(), "Welcome to App User!!", text);
+			if(flag)
+				message+=", Email also sent!!";
+			else
+				message+=", Email sending is failed!!";
+			//email config end
+			
+			map.addAttribute("message", message);
 		}
 
 		return "UserRegisterPage";
@@ -71,7 +91,7 @@ public class UserController {
 	//4.delete one user base on userId
 	@RequestMapping("/delete")
 	public String deleteOneUser(@RequestParam Integer userId,ModelMap map) {
-		
+
 		try {
 			//delete one row
 			service.deleteUser(userId);
@@ -83,7 +103,7 @@ public class UserController {
 		//load all users from DB and send to UI
 		map.addAttribute("user", service.getAllUsers());
 		return "UserData";
-		
+
 	}
 
 
@@ -96,7 +116,7 @@ public class UserController {
 			// load one user data and send to UI
 			map.addAttribute("user", service.getUserById(userId));
 			page = "UserView";
-			
+
 		} else {
 			// load one user data and send to UI
 			map.addAttribute("user", service.getAllUsers());
@@ -143,7 +163,7 @@ public class UserController {
 
 		if (userId!=0) {
 			return new ModelAndView(new UserExcelView(),"user",Arrays.asList(service.getUserById(userId)));
-			
+
 		} else {
 			return new ModelAndView(new UserExcelView(),"user",service.getAllUsers());
 
@@ -163,18 +183,18 @@ public class UserController {
 	public ModelAndView exportOneUserTopdf(@RequestParam(required=false,defaultValue="0") Integer userId) {
 
 		if (userId!=0) {
-			
+
 			return new ModelAndView(new UserPdfView(),"user",Arrays.asList(service.getUserById(userId)));
 		} else {
 
 			return new ModelAndView(new UserPdfView(),"user",service.getAllUsers());
 		}
 	}
-	
+
 	//10.generate chart
 	@RequestMapping("/report")
 	public String generateChart() {
-		
+
 		String path = servletContext.getRealPath("/");
 		List<Object[]> users=service.getUsersCount();
 		userUtil.generatePieChart(path, users);

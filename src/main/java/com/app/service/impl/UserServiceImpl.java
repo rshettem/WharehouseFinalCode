@@ -3,6 +3,7 @@ package com.app.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +16,12 @@ public class UserServiceImpl implements IUserService{
 
 	@Autowired
 	private IUserDao dao;
+	@Autowired
+	private BCryptPasswordEncoder pwdEncoder;
 	
 	@Transactional
 	public Integer saveUser(User user) {
-		
+		user.setUserPassword(pwdEncoder.encode(user.getUserPassword()));
 		return dao.saveUser(user);
 	}
 

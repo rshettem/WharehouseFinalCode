@@ -9,9 +9,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement ;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -97,12 +99,38 @@ public class AppConfig implements WebMvcConfigurer{
 		return v;  
 	} 
 
-	//6.
+	//6. Multipart Resolver
 	@Bean
 	public  CommonsMultipartResolver multipartResolver() {
 		CommonsMultipartResolver cm=new CommonsMultipartResolver();
 		return cm;
 	}
+	
+	//7. Email Configuration
+	@Bean
+	public JavaMailSenderImpl mail() {
+		JavaMailSenderImpl mail = new JavaMailSenderImpl();
+		mail.setHost(env.getProperty("email.host"));
+		mail.setPort(env.getProperty("email.port",Integer.class));
+		mail.setUsername(env.getProperty("email.usr"));//enter your  emailId.
+		mail.setPassword(env.getProperty("email.pwd"));//enter ur password.
+		mail.setJavaMailProperties(eprops());
+		return mail;
+	}
+
+	private Properties eprops() {
+		Properties p = new Properties();
+		p.put("mail.smtp.auth", env.getProperty("email.auth"));
+		p.put("mail.smtp.starttls.enable", env.getProperty("email.ssl.enbl"));
+		return p;
+	}
+
+	//8. Password Encoder
+	@Bean
+	public BCryptPasswordEncoder pwdEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry reg) {
