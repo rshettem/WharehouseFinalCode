@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<%@include file="MenuBar.jsp"%>
+	<%@include file="HomeMenu.jsp"%>
 	<div class="container">
 		<div class="card">
 			<div class="card-header bg-info text-white">
@@ -142,9 +142,7 @@
 					</div>
 				</form:form>
 			</div>
-			<h5>
-				<a href="view" class="btn btn-info">View Data Here</a>
-			</h5>
+			
 			<c:if test="${message !=null}">
 				<div class="card-footer">${message}</div>
 			</c:if>

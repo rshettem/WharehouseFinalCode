@@ -100,13 +100,14 @@
 					class="dropdown-item" href="${url}/sale/view">View All</a>
 			</div></li>
 		<!-- User -->
-		<li class="nav-item dropdown"><a class="nav-link dropdown-toggle"
+		<%-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle"
 			href="#" id="navbardrop" data-toggle="dropdown">User</a>
 			<div class="dropdown-menu">
 				<a class="dropdown-item" href="${url}/user/register">Register </a> <a
 					class="dropdown-item" href="${url}/user/view">View All</a>
-			</div></li>
+			</div></li> --%>
 
+	<li class="nav-item"><a class="nav-link" href="${url}/logout">LOGOUT</a></li>
 	<%-- 		<!-- SWAGGER -->
 		<li class="nav-item"><a class="nav-link"
 			href="${url}/swagger-ui.html">Swagger</a></li>

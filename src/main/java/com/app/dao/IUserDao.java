@@ -13,5 +13,6 @@ public interface IUserDao {
 	public List<User> getAllUsers();
 	public List<Object[]> getUsersCount();
 	public boolean isEmailOrMobileExist(String type,String userEmailOrmobile);
+	public User findByUserEmail(String username);
 	
 }
