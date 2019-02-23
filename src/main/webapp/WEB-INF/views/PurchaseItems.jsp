@@ -53,6 +53,7 @@
 							<th>ITEM CODE</th>
 							<th>BASE COST</th>
 							<th>QTY</th>
+							<th>LINE TOTAL</th>
 						</tr>
 						<c:forEach items="${dtls}" var="poDtl">
 							<tr>
@@ -61,6 +62,7 @@
 								<td><c:out value="${poDtl.itemDtl.itemCode}" /></td>
 								<td><c:out value="${poDtl.itemDtl.itemBaseCost}" /></td>
 								<td><c:out value="${poDtl.itemsQty}" /></td>
+								<td><c:out value="${poDtl.itemDtl.itemBaseCost * poDtl.itemsQty}" /></td>
 								<c:if test="${poStatus =='PICKING' }">
 									<td><a
 										href="removeItem?orderDtlId=${poDtl.orderDtlId}&orderId=${poDtl.poHdrId}"

@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -23,6 +24,7 @@ public class PurchaseDtl {
 	@Column(name="poHdr_Id")
 	private Integer poHdrId;
 
+	@Transient
 	@Column(name="dtl_slno")
 	private int slno;
 
@@ -32,6 +34,9 @@ public class PurchaseDtl {
 
 	@Column(name="bs_cost")
 	private Double baseCost;
+	
+	@Column(name="grn_status")
+	private String grnStatus;
 	
 	@Column(name="itm_qty")
 	private Long itemsQty;
@@ -89,6 +94,14 @@ public class PurchaseDtl {
 		this.baseCost = baseCost;
 	}
 
+	public String getGrnStatus() {
+		return grnStatus;
+	}
+
+	public void setGrnStatus(String grnStatus) {
+		this.grnStatus = grnStatus;
+	}
+
 	public Long getItemsQty() {
 		return itemsQty;
 	}
@@ -105,11 +118,5 @@ public class PurchaseDtl {
 		this.lineValue = lineValue;
 	}
 
-	@Override
-	public String toString() {
-		return "PurchaseDtl [orderDtlId=" + orderDtlId + ", poHdrId=" + poHdrId + ", slno=" + slno + ", itemDtl="
-				+ itemDtl + ", baseCost=" + baseCost + ", itemsQty=" + itemsQty + ", lineValue=" + lineValue + "]";
-	}
-	
 		
 }

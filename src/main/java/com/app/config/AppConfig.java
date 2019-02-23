@@ -23,12 +23,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.app.model.Document;
+import com.app.model.GoodRecieveNote;
 import com.app.model.Item;
 import com.app.model.OrderMethod;
 import com.app.model.Purchase;
 import com.app.model.PurchaseDtl;
 import com.app.model.SaleOrder;
+import com.app.model.SalesDetails;
 import com.app.model.ShipmentType;
+import com.app.model.Shipping;
 import com.app.model.Uom;
 import com.app.model.User;
 import com.app.model.WhUserType; 
@@ -66,7 +69,8 @@ public class AppConfig implements WebMvcConfigurer{
 		sf.setAnnotatedClasses(ShipmentType.class,Uom.class,
 				OrderMethod.class,WhUserType.class,User.class,
 				Document.class,Item.class,Purchase.class,SaleOrder.class,
-				PurchaseDtl.class
+				PurchaseDtl.class,SalesDetails.class,GoodRecieveNote.class,
+				Shipping.class
 				); //Model class names  
 		return sf;  
 	}   

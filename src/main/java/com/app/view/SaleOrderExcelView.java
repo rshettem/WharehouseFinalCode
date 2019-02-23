@@ -41,8 +41,8 @@ public class SaleOrderExcelView extends AbstractXlsxView{
 		row.createCell(4).setCellValue("STOCK SOURCE");
 		row.createCell(5).setCellValue("STATUS");
 		row.createCell(6).setCellValue("CUSTOMER");
-		row.createCell(6).setCellValue("SHIPMENT CODE");
-		row.createCell(7).setCellValue("NOTE");
+		row.createCell(7).setCellValue("SHIPMENT CODE");
+		row.createCell(8).setCellValue("NOTE");
 	}
 	
 	private void setBody(Sheet sheet, List<SaleOrder> saleOrder) {
@@ -57,8 +57,8 @@ public class SaleOrderExcelView extends AbstractXlsxView{
 			row.createCell(4).setCellValue(p.getStockSource());
 			row.createCell(5).setCellValue(p.getOrderStatus());
 			row.createCell(6).setCellValue(p.getWhUserType().getUserCode());
-			row.createCell(6).setCellValue(p.getShipmentType().getShipmentCode());
-			row.createCell(7).setCellValue(p.getOrderDesc());
+			row.createCell(7).setCellValue(p.getShipmentType().getShipmentCode());
+			row.createCell(8).setCellValue(p.getOrderDesc());
 		}
 		
 	}
